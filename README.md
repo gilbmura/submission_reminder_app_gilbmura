@@ -75,9 +75,9 @@ Contains sample student submission data in CSV format.
 - The script is designed to run on Linux-based systems.
 
 ## License
-This project is open-source and available under the MIT License.
+This project is open-source and available for everyone to modify it.
 
 ## Author
-Developed by {YourName}. If you have any questions, feel free to reach out!
+Developed by Gilbert. If you have any questions, feel free to reach out!
 
 
