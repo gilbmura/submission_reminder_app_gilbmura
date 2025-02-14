@@ -54,7 +54,7 @@ EOF
 echo "Creating config.env..."
 cat << 'EOF' > $base_dir/config/config.env
 ASSIGNMENT="Linux basics files permissions"
-TIME_REMAINING=3
+DAYS_REMAINING=2
 EOF
 
 # Create submissions.txt
@@ -93,7 +93,7 @@ fi
 
 # Display assignment details from the environment variables
 echo "Assignment: $ASSIGNMENT"
-echo "Days remaining to submit: $TIME_REMAINING days"
+echo "Days remaining to submit: $DAYS_REMAINING days"
 echo "----------------------------------------------"
 
 # Call the function to check submissions
