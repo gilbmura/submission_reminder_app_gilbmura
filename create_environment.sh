@@ -9,14 +9,14 @@ base_dir="submission_reminder_${user_name}"
 
 # Create the directory structure
 echo "Creating directory structure..."
-mkdir -p $base_dir/app
-mkdir -p $base_dir/config
-mkdir -p $base_dir/modules
-mkdir -p $base_dir/assets
+mkdir -p "$base_dir/app"
+mkdir -p "$base_dir/config"
+mkdir -p "$base_dir/modules"
+mkdir -p "$base_dir/assets"
 
 # Create reminder.sh
 echo "Creating reminder.sh..."
-cat << 'EOF' > $base_dir/app/reminder.sh
+cat << 'EOF' > "$base_dir/app/reminder.sh"
 #!/bin/bash
 # Source environment variables and helper functions
 source ../config/config.env
@@ -30,12 +30,12 @@ echo "Assignment: $ASSIGNMENT"
 echo "Days remaining to submit: $DAYS_REMAINING days"
 echo "--------------------------------------------"
 
-check_submissions $submissions_file
+check_submissions "$submissions_file"
 EOF
 
 # Create functions.sh
 echo "Creating functions.sh..."
-cat << 'EOF' > $base_dir/modules/functions.sh
+cat << 'EOF' > "$base_dir/modules/functions.sh"
 #!/bin/bash
 
 function check_submissions() {
@@ -43,39 +43,49 @@ function check_submissions() {
     echo "Checking submissions in $submissions_file"
 
     while IFS=, read -r student assignment status; do
-        if [[ "$assignment" == "$ASSIGNMENT" && "$status" == " not submitted" ]]; then
+        # Remove leading and trailing whitespace
+        student=$(echo "$student" | xargs)
+        assignment=$(echo "$assignment" | xargs)
+        status=$(echo "$status" | xargs)
+
+        # Check if assignment matches and status is 'not submitted'
+        if [[ "$assignment" == "$ASSIGNMENT" && "$status" == "not submitted" ]]; then
             echo "Reminder: $student has not submitted the $ASSIGNMENT assignment!"
         fi
-    done < <(tail -n +2 $submissions_file)
+    done < <(tail -n +2 "$submissions_file")
 }
 EOF
 
 # Create config.env
 echo "Creating config.env..."
-cat << 'EOF' > $base_dir/config/config.env
-ASSIGNMENT="Linux basics files permissions"
+cat << 'EOF' > "$base_dir/config/config.env"
+ASSIGNMENT="Shell Navigation"
 DAYS_REMAINING=2
 EOF
 
 # Create submissions.txt
 echo "Creating submissions.txt and adding student records..."
-echo "Student,Assignment,Submission Status" > $base_dir/assets/submissions.txt
-cat << 'EOF' >> $base_dir/assets/submissions.txt
-Noel,Linux basics files permissions, not submitted
-Melinda,Linux basics files permissions, not submitted
-Desire,Linux basics files permissions, submitted
-Betty,Linux basics files permissions, not submitted
-John,Linux basics files permissions, submitted
-Eva,Linux basics files permissions, not submitted
-Mike,Linux basics files permissions, not submitted
-Anna,Linux basics files permissions, submitted
-Tom,Linux basics files permissions, submitted
-Sara,Linux basics files permissions, not submitted
+echo "student,assignment,submission status" > "$base_dir/assets/submissions.txt"
+cat << 'EOF' >> "$base_dir/assets/submissions.txt"
+Chinemerem,Shell Navigation,not submitted
+Chiagoziem,Git,submitted
+Divine,Shell Navigation,not submitted
+Anissa,Shell Basics,submitted
+Noel,Shell Navigation,not submitted
+Melinda,Shell Navigation,not submitted
+Desire,Shell Navigation,submitted
+Betty,Shell Navigation,not submitted
+John,Shell Navigation,submitted
+Eva,Shell Navigation,not submitted
+Mike,Shell Navigation,not submitted
+Anna,Shell Navigation,submitted
+Tom,Shell Navigation,submitted
+Sara,Shell Navigation,not submitted
 EOF
 
 # Create startup.sh
 echo "Creating startup.sh..."
-cat << 'EOF' > $base_dir/startup.sh
+cat << 'EOF' > "$base_dir/startup.sh"
 #!/bin/bash
 
 # Load environment variables and functions
@@ -104,9 +114,9 @@ echo "Reminder app started successfully!"
 EOF
 
 # Set permissions to make scripts executable
-chmod +x $base_dir/app/reminder.sh
-chmod +x $base_dir/modules/functions.sh
-chmod +x $base_dir/startup.sh
+chmod +x "$base_dir/app/reminder.sh"
+chmod +x "$base_dir/modules/functions.sh"
+chmod +x "$base_dir/startup.sh"
 
 echo "Environment setup is complete!"
 
