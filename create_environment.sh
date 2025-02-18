@@ -19,11 +19,11 @@ echo "Creating reminder.sh..."
 cat << 'EOF' > "$base_dir/app/reminder.sh"
 #!/bin/bash
 # Source environment variables and helper functions
-source ../config/config.env
-source ../modules/functions.sh
+source ./config/config.env
+source ./modules/functions.sh
 
 # Path to the submissions file
-submissions_file="../assets/submissions.txt"
+submissions_file="./assets/submissions.txt"
 
 # Print remaining time and run the reminder function
 echo "Assignment: $ASSIGNMENT"
@@ -88,35 +88,13 @@ echo "Creating startup.sh..."
 cat << 'EOF' > "$base_dir/startup.sh"
 #!/bin/bash
 
-# Load environment variables and functions
-source ./config/config.env
-source ./modules/functions.sh
-
-# Path to the submissions file
-submissions_file="./assets/submissions.txt"
-
-# Check if the submissions file exists
-if [ ! -f "$submissions_file" ]; then
-    echo "Error: Submissions file not found at $submissions_file"
-    exit 1
-fi
-
-# Display assignment details from the environment variables
-echo "Assignment: $ASSIGNMENT"
-echo "Days remaining to submit: $DAYS_REMAINING days"
-echo "----------------------------------------------"
-
-# Call the function to check submissions
-check_submissions "$submissions_file"
-
-# Final message
-echo "Reminder app started successfully!"
+bash ./app/reminder.sh
 EOF
-
 # Set permissions to make scripts executable
 chmod +x "$base_dir/app/reminder.sh"
 chmod +x "$base_dir/modules/functions.sh"
 chmod +x "$base_dir/startup.sh"
 
 echo "Environment setup is complete!"
-
+cd "$base_dir"
+./startup.sh
